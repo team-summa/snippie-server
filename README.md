@@ -1,1 +1,0 @@
-# snippie-server
