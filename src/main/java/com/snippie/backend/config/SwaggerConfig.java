@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-    private final String API_TITLE = "Snippie Backend API";
-    private final String API_VERSION = "v1.0.0";
-    private final String API_DESCRIPTION = "Snippie 프로젝트 Backend API 명세서입니다.";
+    private static final String API_TITLE = "Snippie Backend API";
+    private static final String API_VERSION = "v1.0.0";
+    private static final String API_DESCRIPTION = "Snippie 프로젝트 Backend API 명세서입니다.";
 
     @Bean
     public OpenAPI openAPI() {
