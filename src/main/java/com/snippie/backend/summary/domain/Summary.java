@@ -2,15 +2,17 @@ package com.snippie.backend.summary.domain;
 
 import com.snippie.backend.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "summaries")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@EntityListeners(AuditingEntityListener.class)
+@Table(name = "summaries")
 public class Summary {
 
     @Id
@@ -29,14 +31,44 @@ public class Summary {
     private String title;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String content;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "summary", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private TextInput textInput;
 
-    @OneToOne(mappedBy = "summary", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CodeDiffInput codeDiffInput;
+
+    @Builder
+    private Summary(User user, SummaryType summaryType, String title, String content) {
+        this.user = user;
+        this.summaryType = summaryType;
+        this.title = title;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void addTextInput(TextInput textInput) {
+        this.textInput = textInput;
+        textInput.setSummary(this);
+    }
+
+    public void addCodeDiffInput(CodeDiffInput codeDiffInput) {
+        this.codeDiffInput = codeDiffInput;
+        codeDiffInput.setSummary(this);
+    }
+
+    public void changeTitleAndContent(String title, String content) {
+        this.title   = title;
+        this.content = content;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

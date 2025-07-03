@@ -2,8 +2,9 @@ package com.snippie.backend.user.domain;
 
 import com.snippie.backend.summary.domain.Summary;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -28,9 +29,26 @@ public class User {
     @Column(name = "avatar_url", nullable = false)
     private String avatarUrl;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Summary> summaries = new ArrayList<>();
+
+    @Builder
+    public User(String githubId, String nickname, String avatarUrl) {
+        this.githubId = githubId;
+        this.nickname = nickname;
+        this.avatarUrl = avatarUrl;
+    }
+
+    public void addSummary(Summary summary) {
+        this.summaries.add(summary);
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
 }
