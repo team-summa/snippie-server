@@ -18,8 +18,12 @@ import java.util.Optional;
 public class UserController {
     private final UserService service;
 
-    @GetMapping("")
-    public ResponseEntity<UserResponseDto> getUser(Long id, String type) {
+    @GetMapping
+    public ResponseEntity<UserResponseDto> getUser(
+            @AuthenticationPrincipal UserPrincipal user,
+            String type
+    ) {
+        Long id = user.getId();
         return ResponseEntity.ok().body(service.getUserInfo(id, type));
     }
 
