@@ -9,6 +9,7 @@ public enum ErrorCode {
     EMPTY_INPUT(HttpStatus.BAD_REQUEST, "C002", "입력값이 비어 있습니다."),
     MISSING_REQUIRED_FIELD(HttpStatus.BAD_REQUEST, "C003", "필수 항목이 누락되었습니다."),
     INVALID_SUMMARY_TYPE(HttpStatus.BAD_REQUEST, "C005", "유효하지 않은 요약 타입입니다."),
+    INPUT_TOO_LONG(HttpStatus.BAD_REQUEST, "C006", "입력 데이터가 너무 깁니다."),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A001", "인증이 필요합니다."),
