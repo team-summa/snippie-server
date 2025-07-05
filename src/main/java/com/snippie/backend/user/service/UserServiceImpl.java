@@ -49,9 +49,17 @@ public class UserServiceImpl implements UserService {
         return UserResponseDto.of(user, summaries);
     }
 
-    @Override
+   @Override
     public SummaryDto getUserSummaryDetails(Long id) {
-        return SummaryDto.of(summaryRepository.getSummaryById(id));
+        Summary summary = null;
+
+        try{
+            summary = summaryRepository.getSummaryById(id);
+        }catch (Exception e){
+            throw new SnippieException(ErrorCode.SUMMARY_NOT_FOUND);
+        }
+
+        return SummaryDto.of(summary);
     }
 
 
