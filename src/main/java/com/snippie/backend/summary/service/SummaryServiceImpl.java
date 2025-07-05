@@ -23,6 +23,9 @@ public class SummaryServiceImpl implements SummaryService {
     private final UserRepository userRepository;
     private final GptSummaryService gptSummaryService;
 
+    private static final int MAX_TEXT_LENGTH = 6000;
+    private static final int MAX_CODE_LENGTH = 8000;
+
     @Override
     @Transactional
     public SummaryResponseDto createSummary(SummaryRequestDto request, Long userId) {
@@ -30,6 +33,7 @@ public class SummaryServiceImpl implements SummaryService {
                 .orElseThrow(() -> new SnippieException(ErrorCode.USER_NOT_FOUND));
 
         validateRequest(request);
+        validateInputLength(request);
 
         GptResult gptResult = gptSummaryService.generateSummary(request);
 
@@ -68,6 +72,18 @@ public class SummaryServiceImpl implements SummaryService {
 
         if (hasText && hasCode) {
             throw new SnippieException(ErrorCode.INVALID_INPUT_VALUE, "inputText와 beforeCode/afterCode는 동시에 보낼 수 없습니다.");
+        }
+    }
+
+    private void validateInputLength(SummaryRequestDto request) {
+        if (request.getInputText() != null && request.getInputText().length() > MAX_TEXT_LENGTH) {
+            throw new SnippieException(ErrorCode.INPUT_TOO_LONG, "요약할 텍스트가 너무 깁니다. (최대 1500자)");
+        }
+        if (request.getBeforeCode() != null && request.getBeforeCode().length() > MAX_CODE_LENGTH) {
+            throw new SnippieException(ErrorCode.INPUT_TOO_LONG, "변경 전 코드가 너무 깁니다. (최대 5000자)");
+        }
+        if (request.getAfterCode() != null && request.getAfterCode().length() > MAX_CODE_LENGTH) {
+            throw new SnippieException(ErrorCode.INPUT_TOO_LONG, "변경 후 코드가 너무 깁니다. (최대 5000자)");
         }
     }
 }
