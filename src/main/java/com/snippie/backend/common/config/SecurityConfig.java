@@ -20,7 +20,10 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/api/summaries" // 임시, 추후 삭제
+                                "/api/summaries",
+                                "/api/summaries/**",// 임시, 추후 삭제
+                                "/api/users/me"
+
                         )
                         .permitAll()
                         .anyRequest().authenticated()
