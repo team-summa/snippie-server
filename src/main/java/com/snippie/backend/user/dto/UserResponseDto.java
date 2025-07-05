@@ -7,8 +7,6 @@ import lombok.*;
 import java.util.List;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class UserResponseDto {
 
