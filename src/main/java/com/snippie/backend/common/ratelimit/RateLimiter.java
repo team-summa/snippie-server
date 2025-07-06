@@ -1,7 +1,6 @@
 package com.snippie.backend.common.ratelimit;
 
 import com.snippie.backend.common.exception.RateLimitExceededException;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,6 @@ public class RateLimiter {
 
     private final StringRedisTemplate redisTemplate;
 
-    // === 한도 ===
     private static final int SLIDING_WINDOW_LIMIT = 20;
     private static final int DAILY_LIMIT          = 60;
     private static final long SLIDING_WINDOW_MS   = 3 * 60 * 60 * 1000;
