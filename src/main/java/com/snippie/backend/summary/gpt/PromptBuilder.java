@@ -68,14 +68,14 @@ public class PromptBuilder {
             return """
                 다음 코드 변경 내용을 요약해 주세요.
                 - `title`: 한 줄 커밋 메시지로 작성 (예: feat: 로그인 예외 처리 개선)
-                - `content`: 코드 변경 내용의 주요 사항을 Markdown 리스트로 작성
+                - `content`: 코드 변경 내용의 주요 사항을 Markdown 형식으로 작성
                 - 반드시 아래 JSON 형식으로만 출력
 
                 {
-                  "title": "feat: 코드 변경 요약 제목",
-                  "content": "- 코드 변경 내용 설명 1\\n- 코드 변경 내용 설명 2"
+                  "title": "커밋메세지",
+                  "content": "- \\n- "
                 }
-            
+               
                 ### 변경 전 코드
                 ~~~
                 %s
