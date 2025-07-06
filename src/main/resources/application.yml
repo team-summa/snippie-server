@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: snippie-backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/snippie?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    url: jdbc:mysql://snippie-db.clggsugmoj4s.ap-northeast-2.rds.amazonaws.com:3306/snippie?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: "csedbadmin"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  profiles:
+    include: oauth2
+
+server:
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        http-only: true
+        secure: true
+        same-site: none
+
+openai:
+  api-key: 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
+  model: gpt-3.5-turbo

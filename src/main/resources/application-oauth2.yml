@@ -1,0 +1,13 @@
+## OAuth2
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23lihVLugUqNBok5sh
+            client-secret: 5f364eb0f1cb7e45c527c1069c6aaa0d7905d6f2
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - user:email
+              - read:user
