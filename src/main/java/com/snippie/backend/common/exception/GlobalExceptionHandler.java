@@ -13,7 +13,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SnippieException.class)
     public ResponseEntity<ErrorResponse> handleSnippieException(SnippieException ex, HttpServletRequest request) {
         ErrorCode ec = ex.getErrorCode();
-        ErrorResponse errorResponse = ErrorResponse.of(ec, request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.from(
+                ec.getStatus(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
         return ResponseEntity.status(ec.getStatus()).body(errorResponse);
     }
 
@@ -30,4 +34,17 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleRateLimitExceeded(RateLimitExceededException ex, HttpServletRequest request) {
+        ErrorCode ec = ErrorCode.TOO_MANY_REQUESTS;
+        ErrorResponse errorResponse = ErrorResponse.from(
+                ec.getStatus(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(ec.getStatus()).body(errorResponse);
+    }
+
+
 }

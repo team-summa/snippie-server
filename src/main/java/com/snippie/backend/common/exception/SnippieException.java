@@ -10,10 +10,10 @@ public class SnippieException extends RuntimeException {
         this.logMessage = null;
     }
 
-    public SnippieException(ErrorCode errorCode, String logMessage) {
-        super(errorCode.getMsg());
+    public SnippieException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
         this.errorCode = errorCode;
-        this.logMessage = logMessage;
+        this.logMessage = customMessage;
     }
 
     public SnippieException(ErrorCode errorCode, Throwable cause) {

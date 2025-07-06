@@ -1,6 +1,8 @@
 package com.snippie.backend.summary.controller;
 
 import com.snippie.backend.auth.security.UserPrincipal;
+import com.snippie.backend.common.ratelimit.RateLimitStatus;
+import com.snippie.backend.common.ratelimit.RateLimiter;
 import com.snippie.backend.summary.dto.SummaryRequestDto;
 import com.snippie.backend.summary.dto.SummaryResponseDto;
 import com.snippie.backend.summary.service.SummaryService;
@@ -18,17 +20,34 @@ import org.springframework.web.bind.annotation.*;
 public class SummaryController {
     private final SummaryService summaryService;
     private final UserService userService;
+    private final RateLimiter rateLimiter;
 
     @PostMapping
     public ResponseEntity<SummaryResponseDto> createSummary(
             @RequestBody @Valid SummaryRequestDto request,
             @AuthenticationPrincipal UserPrincipal user
     ) {
-        Long userId = user.getId(); // 추후 다시 이 코드로 사용
-//        Long userId = 1L; // 테스트용 하드코딩
-        SummaryResponseDto response = summaryService.createSummary(request, userId);
-        return ResponseEntity.ok(response);
+        long userId = (user != null) ? user.getId() : 1L;
+
+        RateLimitStatus before = rateLimiter.checkLimit(userId);
+
+        try {
+            SummaryResponseDto body = summaryService.createSummary(request, userId);
+
+            RateLimitStatus after = rateLimiter.commitUsage(userId);
+
+            return ResponseEntity.ok()
+                    .header("X-RateLimit-Daily-Used",      String.valueOf(after.getDailyUsed()))
+                    .header("X-RateLimit-Daily-Remaining", String.valueOf(after.getDailyRemaining()))
+                    .header("X-RateLimit-Sliding-Used",    String.valueOf(after.getSlidingUsed()))
+                    .header("X-RateLimit-Sliding-Remaining", String.valueOf(after.getSlidingRemaining()))
+                    .body(body);
+
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<SummaryDto> getSummary(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
