@@ -2,9 +2,10 @@ package com.snippie.backend.user.domain;
 
 import com.snippie.backend.summary.domain.Summary;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ public class User {
     @Builder
     public User(String githubId, String nickname, String avatarUrl) {
         this.githubId = githubId;
+        this.nickname = nickname;
+        this.avatarUrl = avatarUrl;
+    }
+
+    public void updateUserInfo(String nickname, String avatarUrl) {
         this.nickname = nickname;
         this.avatarUrl = avatarUrl;
     }
