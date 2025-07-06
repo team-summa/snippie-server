@@ -1,6 +1,5 @@
 package com.snippie.backend.user.repository;
 
-
 import com.snippie.backend.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
