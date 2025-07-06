@@ -1,9 +1,11 @@
 package com.snippie.backend.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.snippie.backend.auth.handler.CustomLogoutSuccessHandler;
 import com.snippie.backend.auth.handler.CustomOAuth2FailureHandler;
 import com.snippie.backend.auth.handler.CustomOAuth2SuccessHandler;
 import com.snippie.backend.auth.service.CustomOAuth2UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +32,7 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     private static final String[] WHITELIST = {
             "/",
@@ -47,11 +50,12 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
+                //인증
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WHITELIST).permitAll()
                         .anyRequest().authenticated()
@@ -61,18 +65,16 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(customOAuth2SuccessHandler)
-//                        .failureHandler(customOAuth2FailureHandler)
+                        .failureHandler(customOAuth2FailureHandler)
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID"));
 
-                //jwt
-//                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
-//                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, WHITELIST, objectMapper),
-//                UsernamePasswordAuthenticationFilter.class)
-//                 .addFilterBefore(new CustomLogoutFilter(tokenProvider, objectMapper), LogoutFilter.class);
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
+
         return http.build();
     }
 

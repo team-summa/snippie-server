@@ -25,8 +25,12 @@ server:
       cookie:
         http-only: true
         secure: true
-        same-site: none
+        same-site: lax
 
 openai:
   api-key: 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
   model: gpt-3.5-turbo
+
+app:
+  oauth2:
+    success-redirect-uri: http://localhost:3000/

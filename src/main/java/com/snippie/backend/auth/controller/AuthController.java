@@ -1,6 +1,10 @@
 package com.snippie.backend.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,19 +31,35 @@ public class AuthController {
         response.sendRedirect("/oauth2/authorization/github");
     }
 
-    @Operation(summary = "로그아웃")
+
+    @Operation(
+            summary = "로그아웃",
+            description = "현재 로그인된 사용자의 세션을 무효화하여 로그아웃합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "로그아웃 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"message\": \"로그아웃 완료\"}"
+                    )
+            )
+    )
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session, HttpServletResponse response) {
-        session.invalidate(); // 서버 세션 제거
-
-        ResponseCookie deleteCookie = ResponseCookie.from("JSESSIONID", "")
-                .path("/")
-                .maxAge(0) // 쿠키 제거
-                .httpOnly(true)
-                .build();
-        response.addHeader("Set-Cookie", deleteCookie.toString()); // 클라이언트 쿠키 삭제
+//        session.invalidate(); // 서버 세션 제거
+//
+//        ResponseCookie deleteCookie = ResponseCookie.from("JSESSIONID", "")
+//                .path("/")
+//                .maxAge(0) // 쿠키 제거
+//                .httpOnly(true)
+//                .build();
+//        response.addHeader("Set-Cookie", deleteCookie.toString()); // 클라이언트 쿠키 삭제
 
         return ResponseEntity.ok("로그아웃 완료");
     }
+
 
 }

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserRepository userRepository;
+
+    @Value("${app.oauth2.success-redirect-uri}")
+    private String successRedirectUri;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -42,16 +46,6 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // SecurityContext에 새 Authentication 등록
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        HttpSession session = request.getSession();
-        session.setAttribute("user",user);
-
-//        response.sendRedirect("http://localhost:3000/");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"로그인 성공\"}");
-        response.getWriter().flush();
-
-        return;
-//       super.onAuthenticationSuccess(request, response, auth);
+        response.sendRedirect(successRedirectUri);
     }
 }
