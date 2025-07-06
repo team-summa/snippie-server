@@ -61,5 +61,11 @@ public class AuthController {
         return ResponseEntity.ok("로그아웃 완료");
     }
 
+    // 추후 삭제 예정
+    @PostMapping("/test-login")
+    public ResponseEntity<String> testLogin(HttpSession session) {
+        session.setAttribute("userId", 1L); // 임시 사용자 ID
+        return ResponseEntity.ok("테스트 로그인 성공");
+    }
 
 }

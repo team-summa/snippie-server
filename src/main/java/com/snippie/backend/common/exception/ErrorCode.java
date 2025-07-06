@@ -23,7 +23,7 @@ public enum ErrorCode {
     DUPLICATE_SUMMARY(HttpStatus.CONFLICT, "C004", "이미 생성된 요약입니다."),
 
     // 429 TOO MANY REQUESTS
-    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "R001", "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "R001", "최근 3시간 동안 최대 {limit}회 호출만 허용됩니다."),
 
     // 500 ERROR
     GPT_API_ERROR(HttpStatus.BAD_GATEWAY, "S001", "요약 생성 중 오류가 발생했습니다."),
