@@ -34,6 +34,15 @@ public class Summary {
     @Basic(fetch = FetchType.LAZY)
     private String content;
 
+    @Column(name = "prompt_tokens")
+    private Integer promptTokens;
+
+    @Column(name = "completion_tokens")
+    private Integer completionTokens;
+
+    @Column(name = "total_tokens")
+    private Integer totalTokens;
+
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
@@ -44,10 +53,13 @@ public class Summary {
     private CodeDiffInput codeDiffInput;
 
     @Builder
-    private Summary(User user, SummaryType summaryType, String title, String content) {
+    private Summary(User user, SummaryType summaryType, String title, String content, Integer promptTokens, Integer completionTokens, Integer totalTokens) {
         this.user = user;
         this.summaryType = summaryType;
         this.title = title;
+        this.promptTokens = promptTokens;
+        this.completionTokens = completionTokens;
+        this.totalTokens = totalTokens;
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }

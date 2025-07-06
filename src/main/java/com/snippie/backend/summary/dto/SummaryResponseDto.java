@@ -1,14 +1,13 @@
 package com.snippie.backend.summary.dto;
 
 import com.snippie.backend.summary.domain.Summary;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class SummaryResponseDto {
     private Long summaryId;
     private String type;
@@ -16,13 +15,20 @@ public class SummaryResponseDto {
     private String content;
     private LocalDateTime createdAt;
 
+    private Integer promptTokens;
+    private Integer completionTokens;
+    private Integer totalTokens;
+
     public static SummaryResponseDto of(Summary s) {
-        return new SummaryResponseDto(
-                s.getId(),
-                s.getSummaryType().name(),
-                s.getTitle(),
-                s.getContent(),
-                s.getCreatedAt()
-        );
+        return SummaryResponseDto.builder()
+                .summaryId(s.getId())
+                .type(s.getSummaryType().name())
+                .title(s.getTitle())
+                .content(s.getContent())
+                .createdAt(s.getCreatedAt())
+                .promptTokens(s.getPromptTokens())
+                .completionTokens(s.getCompletionTokens())
+                .totalTokens(s.getTotalTokens())
+                .build();
     }
 }

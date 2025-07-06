@@ -47,13 +47,8 @@ public class GptClient {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
 
         try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(OPENAI_URL, request, Map.class);
-
-            List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
-            Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-
-            return (String) message.get("content");
-
+            ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_URL, request, String.class);
+            return response.getBody();
         } catch (HttpClientErrorException e) {
             // 인증 에러나 잘못된 요청
             throw new SnippieException(ErrorCode.GPT_API_ERROR, "GPT 요청 오류: " + e.getMessage());
