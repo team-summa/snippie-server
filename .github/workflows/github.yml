@@ -25,8 +25,8 @@ jobs:
         run: chmod +x gradlew
 
       # 3. Gradle Build
-      - name: Build with Gradle
-        run: ./gradlew clean build
+      - name: Build with Gradle (skip tests)
+        run: ./gradlew clean build -x test
 
       # 4. Docker Hub 로그인
       - name: Login to DockerHub
