@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -124,5 +125,29 @@ public class SummaryController {
             @PathVariable Long id,
             @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok().body(userService.getUserSummaryDetails(id));
+    }
+
+    @Operation(
+            summary = "요약 삭제",
+            description = """
+                    요약 ID를 통해 통해 특정 요약을 삭제합니다.
+                    
+                    - 사용자가 작성한 요약만 삭제 가능
+                    - 존재하지 않는 ID 조회 시 404 에러 반환
+                    """
+    )
+    @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content)
+    @ApiResponse(responseCode = "404", description = "요약 조회 실패", content = @Content)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SummaryDto> deleteSummary(
+            @Parameter(description = "요약 ID", example = "1")
+            @PathVariable Long id,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user){
+        try {
+            userService.deleteSummary(id);
+            return ResponseEntity.ok().build();
+        }catch (Exception ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
