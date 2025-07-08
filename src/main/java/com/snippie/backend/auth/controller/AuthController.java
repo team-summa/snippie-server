@@ -1,0 +1,71 @@
+package com.snippie.backend.auth.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    @Operation(
+            summary = "깃허브 소셜 로그인 API",
+            description = "깃허브 로그인")
+    @GetMapping("/github/login")
+    public void redirectToGithub(HttpServletResponse response) throws IOException {
+        // OAuth2 로그인 기본 경로로 리다이렉트
+        response.sendRedirect("/oauth2/authorization/github");
+    }
+
+
+    @Operation(
+            summary = "로그아웃",
+            description = "현재 로그인된 사용자의 세션을 무효화하여 로그아웃합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "로그아웃 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"message\": \"로그아웃 완료\"}"
+                    )
+            )
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session, HttpServletResponse response) {
+//        session.invalidate(); // 서버 세션 제거
+//
+//        ResponseCookie deleteCookie = ResponseCookie.from("JSESSIONID", "")
+//                .path("/")
+//                .maxAge(0) // 쿠키 제거
+//                .httpOnly(true)
+//                .build();
+//        response.addHeader("Set-Cookie", deleteCookie.toString()); // 클라이언트 쿠키 삭제
+
+        return ResponseEntity.ok("로그아웃 완료");
+    }
+
+    // 추후 삭제 예정
+    @PostMapping("/test-login")
+    public ResponseEntity<String> testLogin(HttpSession session) {
+        session.setAttribute("userId", 1L); // 임시 사용자 ID
+        return ResponseEntity.ok("테스트 로그인 성공");
+    }
+
+}
