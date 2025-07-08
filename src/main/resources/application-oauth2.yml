@@ -1,0 +1,13 @@
+## OAuth2
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${{ secrets.OAUTH_GITHUB_CLIENT_ID }}
+            client-secret: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - user:email
+              - read:user
