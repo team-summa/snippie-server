@@ -75,7 +75,7 @@ public class UserController {
             @Parameter(name = "type", description = "요약 type", required = false, example = "ISSUE")
             String type
     ) {
-        long userId = (user != null) ? user.getId() : 5L;
+        long userId = user.getId();
 
         return ResponseEntity.ok().body(service.getUserInfo(userId, type));
     }
