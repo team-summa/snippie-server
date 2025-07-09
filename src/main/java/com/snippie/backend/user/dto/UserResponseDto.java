@@ -20,18 +20,21 @@ public class UserResponseDto {
 
     private List<SummaryDto> summaries;
 
+    private int summaryTotalCount;
+
 
     public static UserResponseDto of(User user, List<Summary> summaries) {
         List<SummaryDto> summaryDtos = summaries.stream()
                 .map(SummaryDto::of)
                 .toList();
-        
+
         return UserResponseDto.builder()
                 .id(user.getId())
                 .githubId(user.getGithubId())
                 .nickname(user.getNickname())
                 .avatarUrl(user.getAvatarUrl())
                 .summaries(summaryDtos)
+                .summaryTotalCount(summaryDtos.size())
                 .build();
     }
 
