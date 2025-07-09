@@ -15,6 +15,9 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A001", "인증이 필요합니다."),
     INVALID_GITHUB_TOKEN(HttpStatus.UNAUTHORIZED, "A002", "유효하지 않은 Github 인증입니다."),
 
+    // 403 FORBIDDEN
+    FORBIDDEN_SUMMARY_ACCESS(HttpStatus.FORBIDDEN, "A003", "해당 요약에 대한 삭제 권한이 없습니다."),
+
     // 404 NOT FOUND
     SUMMARY_NOT_FOUND(HttpStatus.NOT_FOUND, "N001", "요약을 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "N002", "사용자를 찾을 수 없습니다."),
