@@ -36,25 +36,25 @@ public class SummaryController {
     @Operation(
             summary = "요약 생성",
             description = """
-            요약 생성 API
-            
-            1. 요청 규칙
-            - type은 반드시 COMMIT, ISSUE, PR 중 하나만 가능
-            - inputText와 beforeCode/afterCode는 동시에 보낼 수 없음
-            
-            2. 텍스트 요약 요청
-            - inputText 필드만 채워서 요청
-            - 최대 6,000자까지 입력 가능
-            
-            3. 코드 변경 요약 요청
-            - beforeCode, afterCode 필드를 모두 채워서 요청
-            - 각각 최대 8,000자까지 입력 가능
-            
-            4. Rate Limit 정책
-            - 최근 3시간 동안 최대 20회 호출 가능
-            - 하루(24시간) 동안 최대 60회 호출 가능
-            - 호출 제한을 초과하면 HTTP 429 (Too Many Requests) 응답 반환
-            """
+                    요약 생성 API
+                    
+                    1. 요청 규칙
+                    - type은 반드시 COMMIT, ISSUE, PR 중 하나만 가능
+                    - inputText와 beforeCode/afterCode는 동시에 보낼 수 없음
+                    
+                    2. 텍스트 요약 요청
+                    - inputText 필드만 채워서 요청
+                    - 최대 6,000자까지 입력 가능
+                    
+                    3. 코드 변경 요약 요청
+                    - beforeCode, afterCode 필드를 모두 채워서 요청
+                    - 각각 최대 8,000자까지 입력 가능
+                    
+                    4. Rate Limit 정책
+                    - 최근 3시간 동안 최대 20회 호출 가능
+                    - 하루(24시간) 동안 최대 60회 호출 가능
+                    - 호출 제한을 초과하면 HTTP 429 (Too Many Requests) 응답 반환
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -94,9 +94,9 @@ public class SummaryController {
             RateLimitStatus after = rateLimiter.commitUsage(userId);
 
             return ResponseEntity.ok()
-                    .header("X-RateLimit-Daily-Used",      String.valueOf(after.getDailyUsed()))
+                    .header("X-RateLimit-Daily-Used", String.valueOf(after.getDailyUsed()))
                     .header("X-RateLimit-Daily-Remaining", String.valueOf(after.getDailyRemaining()))
-                    .header("X-RateLimit-Sliding-Used",    String.valueOf(after.getSlidingUsed()))
+                    .header("X-RateLimit-Sliding-Used", String.valueOf(after.getSlidingUsed()))
                     .header("X-RateLimit-Sliding-Remaining", String.valueOf(after.getSlidingRemaining()))
                     .body(body);
 
@@ -108,11 +108,11 @@ public class SummaryController {
     @Operation(
             summary = "요약 상세 조회",
             description = """
-            ID를 통해 특정 요약의 상세 정보를 조회합니다.
-            
-            - 사용자가 작성한 요약만 조회 가능
-            - 존재하지 않는 ID 조회 시 404 에러 반환
-            """
+                    ID를 통해 특정 요약의 상세 정보를 조회합니다.
+                    
+                    - 사용자가 작성한 요약만 조회 가능
+                    - 존재하지 않는 ID 조회 시 404 에러 반환
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요약 조회 성공",
@@ -132,22 +132,21 @@ public class SummaryController {
             description = """
                     요약 ID를 통해 통해 특정 요약을 삭제합니다.
                     
-                    - 사용자가 작성한 요약만 삭제 가능
+                    - 사용자가 작성한 요약만 삭제 가능 (403 에러 반환)
                     - 존재하지 않는 ID 조회 시 404 에러 반환
                     """
     )
     @ApiResponse(responseCode = "200", description = "삭제 성공", content = @Content)
+    @ApiResponse(responseCode = "403", description = "삭제 권한이 없음", content = @Content)
     @ApiResponse(responseCode = "404", description = "요약 조회 실패", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<SummaryDto> deleteSummary(
             @Parameter(description = "요약 ID", example = "1")
-            @PathVariable Long id,
-            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user){
-        try {
-            userService.deleteSummary(id);
-            return ResponseEntity.ok().build();
-        }catch (Exception ex) {
-            return ResponseEntity.notFound().build();
-        }
+            @PathVariable("id") Long id,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
+
+        userService.deleteSummary(id, user);
+        return ResponseEntity.ok().build();
+
     }
 }

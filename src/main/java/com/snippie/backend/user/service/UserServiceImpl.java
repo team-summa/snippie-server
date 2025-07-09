@@ -1,5 +1,6 @@
 package com.snippie.backend.user.service;
 
+import com.snippie.backend.auth.security.UserPrincipal;
 import com.snippie.backend.common.exception.ErrorCode;
 import com.snippie.backend.common.exception.SnippieException;
 import com.snippie.backend.summary.domain.Summary;
@@ -10,6 +11,7 @@ import com.snippie.backend.user.domain.User;
 import com.snippie.backend.user.dto.SummaryDto;
 import com.snippie.backend.user.dto.UserResponseDto;
 import com.snippie.backend.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,14 +65,18 @@ public class UserServiceImpl implements UserService {
         return SummaryDto.of(summary);
     }
 
-    @Override
-    public void deleteSummary(Long id) {
-        if (!summaryRepository.existsById(id)) {
-            throw new SnippieException(ErrorCode.SUMMARY_NOT_FOUND);
-        }
 
-        summaryRepository.deleteById(id);
+    @Override
+    public void deleteSummary(Long id, UserPrincipal user) {
+        Summary summary = summaryRepository.findById(id)
+                .orElseThrow(() -> new SnippieException(ErrorCode.SUMMARY_NOT_FOUND));
+
+        if (!summary.getUser().getId().equals(user.getId())) {
+            throw new SnippieException(ErrorCode.FORBIDDEN_SUMMARY_ACCESS);
+        }
+        summaryRepository.delete(summary);
     }
+
 
 
 }
