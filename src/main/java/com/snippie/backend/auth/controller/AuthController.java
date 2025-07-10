@@ -4,12 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,23 +45,6 @@ public class AuthController {
     )
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session, HttpServletResponse response) {
-//        session.invalidate(); // 서버 세션 제거
-//
-//        ResponseCookie deleteCookie = ResponseCookie.from("JSESSIONID", "")
-//                .path("/")
-//                .maxAge(0) // 쿠키 제거
-//                .httpOnly(true)
-//                .build();
-//        response.addHeader("Set-Cookie", deleteCookie.toString()); // 클라이언트 쿠키 삭제
-
         return ResponseEntity.ok("로그아웃 완료");
     }
-
-    // 추후 삭제 예정
-    @PostMapping("/test-login")
-    public ResponseEntity<String> testLogin(HttpSession session) {
-        session.setAttribute("userId", 1L); // 임시 사용자 ID
-        return ResponseEntity.ok("테스트 로그인 성공");
-    }
-
 }
