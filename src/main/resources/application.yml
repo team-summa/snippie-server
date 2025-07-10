@@ -39,5 +39,5 @@ openai:
 
 app:
   oauth2:
-    success-redirect-uri: http://localhost:3000/
+    success-redirect-uri: http://localhost:5173/
 
