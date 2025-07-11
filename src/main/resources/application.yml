@@ -39,5 +39,5 @@ openai:
 
 app:
   oauth2:
-    success-redirect-uri: http://localhost:5173/
+    success-redirect-uri: http://localhost:5173/auth/github/callback
 
