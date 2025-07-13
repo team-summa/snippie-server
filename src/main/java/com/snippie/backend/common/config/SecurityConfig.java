@@ -40,9 +40,9 @@ public class SecurityConfig {
             "/auth/github/login",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/summaries",
-            "/api/summaries/**",// 임시, 추후 삭제
-            "/api/users/me"
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/csrf"
     };
 
     @Bean
@@ -90,7 +90,8 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
                 "http://localhost:8080",
-                "https://d1cb60vykykifk.cloudfront.net"
+                "https://d1cb60vykykifk.cloudfront.net",
+                "https://snippie.site"
         ));
 
         config.setAllowedMethods(List.of(
