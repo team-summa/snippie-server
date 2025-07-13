@@ -41,3 +41,4 @@ app:
   oauth2:
     success-redirect-uri: https://d1cb60vykykifk.cloudfront.net/auth/github/callback
 
+
