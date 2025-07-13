@@ -39,6 +39,6 @@ openai:
 
 app:
   oauth2:
-    success-redirect-uri: https://d1cb60vykykifk.cloudfront.net/auth/github/callback
+    success-redirect-uri: https://snippie.site/auth/github/callback
 
 
