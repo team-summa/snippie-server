@@ -31,7 +31,7 @@ server:
       cookie:
         http-only: true
         secure: true
-        same-site: lax
+        same-site: none
 
 openai:
   api-key: ${OPENAI_API_KEY}
@@ -39,5 +39,6 @@ openai:
 
 app:
   oauth2:
-    success-redirect-uri: http://localhost:5173/auth/github/callback
+    success-redirect-uri: https://d1cb60vykykifk.cloudfront.net/auth/github/callback
+
 

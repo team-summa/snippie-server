@@ -88,8 +88,9 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-                "http://localhost:3000",
-                "http://localhost:8080"
+                "http://localhost:5173",
+                "http://localhost:8080",
+                "https://d1cb60vykykifk.cloudfront.net"
         ));
 
         config.setAllowedMethods(List.of(
