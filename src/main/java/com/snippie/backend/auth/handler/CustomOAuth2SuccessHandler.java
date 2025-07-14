@@ -5,7 +5,6 @@ import com.snippie.backend.auth.dto.UserPrincipal;
 import com.snippie.backend.user.domain.User;
 import com.snippie.backend.user.repository.UserRepository;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,12 +13,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import java.io.IOException;
+
 @Component
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -41,7 +42,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         UserPrincipal principal = new UserPrincipal(user.getId(), user.getNickname());
 
         UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                new UsernamePasswordAuthenticationToken(
+                        (UserDetails) principal, null, principal.getAuthorities()
+                );
 
         // SecurityContext에 새 Authentication 등록
         SecurityContextHolder.getContext().setAuthentication(auth);
