@@ -46,6 +46,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // SecurityContext에 새 Authentication 등록
         SecurityContextHolder.getContext().setAuthentication(auth);
 
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
         response.sendRedirect(successRedirectUri);
     }
 }
