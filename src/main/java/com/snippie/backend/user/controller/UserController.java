@@ -1,7 +1,6 @@
 package com.snippie.backend.user.controller;
 
-import com.snippie.backend.auth.security.UserPrincipal;
-import com.snippie.backend.common.exception.ErrorResponse;
+import com.snippie.backend.auth.dto.UserPrincipal;
 import com.snippie.backend.user.dto.UserResponseDto;
 import com.snippie.backend.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
