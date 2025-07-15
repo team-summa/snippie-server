@@ -1,17 +1,15 @@
 package com.snippie.backend.user.service;
 
-import com.snippie.backend.auth.security.UserPrincipal;
-import com.snippie.backend.summary.dto.SummaryRequestDto;
-import com.snippie.backend.user.domain.User;
+import com.snippie.backend.auth.dto.UserPrincipal;
 import com.snippie.backend.user.dto.SummaryDto;
 import com.snippie.backend.user.dto.UserResponseDto;
 
 public interface UserService {
 
-    public UserResponseDto getUserInfo(Long id, String type);
+    UserResponseDto getUserInfo(Long id, String type);
 
-    SummaryDto getUserSummaryDetails(Long id);
+    SummaryDto getUserSummaryDetails(Long summaryId, Long userId);
 
-    public void deleteSummary(Long id, UserPrincipal user);
+    void deleteSummary(Long id, UserPrincipal user);
 
 }
