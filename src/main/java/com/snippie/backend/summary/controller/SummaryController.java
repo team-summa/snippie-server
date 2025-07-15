@@ -1,6 +1,6 @@
 package com.snippie.backend.summary.controller;
 
-import com.snippie.backend.auth.security.UserPrincipal;
+import com.snippie.backend.auth.dto.UserPrincipal;
 import com.snippie.backend.common.exception.ErrorResponse;
 import com.snippie.backend.common.ratelimit.RateLimitStatus;
 import com.snippie.backend.common.ratelimit.RateLimiter;
@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -84,8 +83,7 @@ public class SummaryController {
             @RequestBody @Valid SummaryRequestDto request,
             @AuthenticationPrincipal UserPrincipal user
     ) {
-        long userId = (user != null) ? user.getId() : 1L;
-
+        long userId = user.getId();
         RateLimitStatus before = rateLimiter.checkLimit(userId);
 
         try {
@@ -121,11 +119,13 @@ public class SummaryController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SummaryDto> getSummary(
-            @Parameter(description = "요약 ID", example = "1")
             @PathVariable Long id,
-            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.ok().body(userService.getUserSummaryDetails(id));
+            @AuthenticationPrincipal UserPrincipal user
+    ) {
+        SummaryDto summary = userService.getUserSummaryDetails(id, user.getId());
+        return ResponseEntity.ok(summary);
     }
+
 
     @Operation(
             summary = "요약 삭제",
