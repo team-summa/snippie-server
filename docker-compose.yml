@@ -20,7 +20,3 @@ services:
     depends_on:
       - redis
     restart: unless-stopped
-
-networks:
-  default:
-    name: snippie_default
