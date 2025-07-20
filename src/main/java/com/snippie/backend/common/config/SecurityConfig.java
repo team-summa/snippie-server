@@ -5,7 +5,6 @@ import com.snippie.backend.auth.handler.CustomLogoutSuccessHandler;
 import com.snippie.backend.auth.handler.CustomOAuth2FailureHandler;
 import com.snippie.backend.auth.handler.CustomOAuth2SuccessHandler;
 import com.snippie.backend.auth.service.CustomOAuth2UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +20,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-//접속: http://localhost:8080/swagger-ui/index.html
-
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -36,12 +33,10 @@ public class SecurityConfig {
 
     private static final String[] WHITELIST = {
             "/",
-            "/login/**",
-            "/auth/github/login",
+            "/api/auth/**",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
-            "/v3/api-docs/swagger-config",
             "/webjars/**",
             "/csrf"
     };
