@@ -63,29 +63,4 @@ public class AuthController {
                 "userId", user.getId()
         ));
     }
-
-
-
-
-    @Operation(
-            summary = "로그아웃",
-            description = "현재 로그인된 사용자의 세션을 무효화하여 로그아웃합니다."
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "로그아웃 성공",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(
-                            type = "object",
-                            example = "{\"message\": \"로그아웃 완료\"}"
-                    )
-            )
-    )
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session, HttpServletResponse response) {
-        return ResponseEntity.ok("로그아웃 완료");
-    }
-
-
 }
