@@ -66,7 +66,7 @@ public class SecurityConfig {
                 )
 
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
+                        .logoutUrl("/api/auth/logout")
                         .logoutSuccessHandler(customLogoutSuccessHandler)
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
