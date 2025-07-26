@@ -15,6 +15,7 @@ import com.snippie.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class SummaryServiceImpl implements SummaryService {
@@ -62,9 +63,12 @@ public class SummaryServiceImpl implements SummaryService {
         return SummaryResponseDto.of(summary);
     }
 
-    private void validateRequest(SummaryRequestDto request) {
+    public void validateRequest(SummaryRequestDto request) {
         boolean hasText = request.getInputText() != null && !request.getInputText().isBlank();
         boolean hasCode = request.getBeforeCode() != null && request.getAfterCode() != null;
+        boolean isEqual = request.getBeforeCode().replaceAll("\\s", "")
+                .equals(request.getAfterCode().replaceAll("\\s", ""));
+
 
         if (!hasText && !hasCode) {
             throw new SnippieException(ErrorCode.MISSING_REQUIRED_FIELD, "inputText 또는 beforeCode/afterCode 중 하나는 필수입니다.");
@@ -72,6 +76,10 @@ public class SummaryServiceImpl implements SummaryService {
 
         if (hasText && hasCode) {
             throw new SnippieException(ErrorCode.INVALID_INPUT_VALUE, "inputText와 beforeCode/afterCode는 동시에 보낼 수 없습니다.");
+        }
+
+        if (isEqual) {
+            throw new SnippieException(ErrorCode.INPUT_SAME_SUMMARY, "beforeCode와 afterCode는 같을 수 없습니다.");
         }
     }
 
