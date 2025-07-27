@@ -27,7 +27,7 @@ server:
 
   servlet:
     session:
-      timeout: 30m
+      timeout: 2h
       cookie:
         http-only: true
         secure: true
@@ -43,7 +43,9 @@ app:
 
 logging:
   level:
-    root: DEBUG
-    org.springframework: DEBUG
-    org.hibernate.SQL: WARN
+    root: INFO
+    org.springframework: INFO
+    org.hibernate.SQL: OFF
     org.hibernate.type.descriptor.sql.BasicBinder: OFF
+    org.springframework.security: WARN
+    io.lettuce.core: WARN
