@@ -44,8 +44,22 @@ app:
 logging:
   level:
     root: INFO
-    org.springframework: INFO
-    org.hibernate.SQL: OFF
-    org.hibernate.type.descriptor.sql.BasicBinder: OFF
-    org.springframework.security: WARN
+
+    # Spring Web 전체 요청 흐름 확인 (컨트롤러 진입 여부 포함)
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: TRACE
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
+
+    # 보안 필터에서 막히는 경우 로그 확인
+    org.springframework.security: DEBUG
+
+    # Hibernate 쿼리 및 바인딩 값 확인
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+
+    # 우리 패키지 (예: com.snippie) 디버깅용
+    com.snippie: DEBUG
+
+    # Redis 라이브러리 (불필요한 잡로그 줄이기)
     io.lettuce.core: WARN
