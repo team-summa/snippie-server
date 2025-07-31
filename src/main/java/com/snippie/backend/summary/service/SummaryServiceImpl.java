@@ -92,8 +92,8 @@ public class SummaryServiceImpl implements SummaryService {
     }
 
     private boolean isCodeEqualIgnoringWhitespace(SummaryRequestDto request) {
-        String before = request.getBeforeCode().replaceAll("\\s", "");
-        String after = request.getAfterCode().replaceAll("\\s", "");
+        String before = request.getBeforeCode();
+        String after = request.getAfterCode();
         return before.equals(after);
     }
 
