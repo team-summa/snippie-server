@@ -64,24 +64,39 @@ public class SummaryServiceImpl implements SummaryService {
     }
 
     public void validateRequest(SummaryRequestDto request) {
-        boolean hasText = request.getInputText() != null && !request.getInputText().isBlank();
-        boolean hasCode = request.getBeforeCode() != null && request.getAfterCode() != null;
-        boolean isEqual = request.getBeforeCode().replaceAll("\\s", "")
-                .equals(request.getAfterCode().replaceAll("\\s", ""));
+        boolean hasText = hasInputText(request);
+        boolean hasCodePair = hasCodePair(request);
 
-
-        if (!hasText && !hasCode) {
-            throw new SnippieException(ErrorCode.MISSING_REQUIRED_FIELD, "inputText 또는 beforeCode/afterCode 중 하나는 필수입니다.");
+        if (!hasText && !hasCodePair) {
+            throw new SnippieException(ErrorCode.MISSING_REQUIRED_FIELD,
+                    "inputText 또는 beforeCode/afterCode 중 하나는 필수입니다.");
         }
 
-        if (hasText && hasCode) {
-            throw new SnippieException(ErrorCode.INVALID_INPUT_VALUE, "inputText와 beforeCode/afterCode는 동시에 보낼 수 없습니다.");
+        if (hasText && hasCodePair) {
+            throw new SnippieException(ErrorCode.INVALID_INPUT_VALUE,
+                    "inputText와 beforeCode/afterCode는 동시에 보낼 수 없습니다.");
         }
 
-        if (isEqual) {
-            throw new SnippieException(ErrorCode.INPUT_SAME_SUMMARY, "beforeCode와 afterCode는 같을 수 없습니다.");
+        if (hasCodePair && isCodeEqualIgnoringWhitespace(request)) {
+            throw new SnippieException(ErrorCode.INPUT_SAME_SUMMARY,
+                    "beforeCode와 afterCode는 같을 수 없습니다.");
         }
     }
+
+    private boolean hasInputText(SummaryRequestDto request) {
+        return request.getInputText() != null && !request.getInputText().isBlank();
+    }
+
+    private boolean hasCodePair(SummaryRequestDto request) {
+        return request.getBeforeCode() != null && request.getAfterCode() != null;
+    }
+
+    private boolean isCodeEqualIgnoringWhitespace(SummaryRequestDto request) {
+        String before = request.getBeforeCode().replaceAll("\\s", "");
+        String after = request.getAfterCode().replaceAll("\\s", "");
+        return before.equals(after);
+    }
+
 
     private void validateInputLength(SummaryRequestDto request) {
         if (request.getInputText() != null && request.getInputText().length() > MAX_TEXT_LENGTH) {
